@@ -1,3 +1,7 @@
+[![Python CI](https://github.com/hamsterflee/check/actions/workflows/main.yml/badge.svg)](https://github.com/hamsterflee/check/actions/workflows/main.yml)
+[![Coverage Status](https://coveralls.io/repos/github/hamsterflee/check/badge.svg?branch=main)](https://coveralls.io/github/hamsterflee/check?branch=main)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=hamsterflee_check&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=hamsterflee_check)
+
 ## Тесты
 ### Блочные тесты
 1. **Создание задачи** (позитивный)
