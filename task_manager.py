@@ -1,6 +1,6 @@
 from datetime import datetime
-from src.task import Task, HighPriorityTask, LowPriorityTask
-from src.project import Project
+from task import Task, HighPriorityTask, LowPriorityTask
+from project import Project
 
 class TaskManager:
     def __init__(self):
