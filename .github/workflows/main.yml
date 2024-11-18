@@ -27,6 +27,6 @@ jobs:
         pip install pytest        
     - name: Run tests
       run: |
-        pytest test_project.py
-        pytest test_task.py
-        pytest test_task_manager.py
+        pytest tests/test_project.py
+        pytest tests/test_task.py
+        pytest tests/test_task_manager.py
