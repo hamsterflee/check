@@ -24,7 +24,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install pytest
+        pip install pytest coverage coveralls
         pip install freezegun 
         
     - name: Run tests
@@ -32,3 +32,15 @@ jobs:
         pytest test_project.py
         pytest test_task.py
         pytest test_task_manager.py
+
+    - name: Run tests with coverage
+      run: |
+        coverage run -m pytest test_project.py
+        coverage run -m pytest test_task.py
+        coverage run -m pytest test_task_manager.py
+
+    - name: Submit coverage to Coveralls
+      env:
+        COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }} 
+      run: |
+        coveralls
