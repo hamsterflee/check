@@ -1,7 +1,7 @@
 import unittest
 from freezegun import freeze_time
-from src.task import Task, HighPriorityTask, LowPriorityTask
-from src.project import Project
+from task import Task, HighPriorityTask, LowPriorityTask
+from project import Project
 
 class TestProject(unittest.TestCase):
     def setUp(self):
