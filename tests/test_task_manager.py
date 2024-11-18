@@ -1,7 +1,7 @@
 import unittest
 from datetime import datetime
-from task import Task, HighPriorityTask, LowPriorityTask
-from task_manager import TaskManager
+from src.task import Task, HighPriorityTask, LowPriorityTask
+from src.task_manager import TaskManager
 from datetime import timedelta
 
 class TestTaskManager(unittest.TestCase):

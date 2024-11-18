@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import messagebox, simpledialog, ttk
-from task_manager import TaskManager
-from task import Task, HighPriorityTask, LowPriorityTask
+from src.task_manager import TaskManager
+from src.task import Task, HighPriorityTask, LowPriorityTask
 
 manager = TaskManager()
 
