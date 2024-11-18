@@ -8,7 +8,7 @@ class Task:
         self.name = name
         self.description = description
         self.priority = priority
-        self.deadline = deadline  # строка в формате "YYYY-MM-DD"
+        self.deadline = deadline
         self.status = status
 
     def _validate_deadline(self, deadline):
