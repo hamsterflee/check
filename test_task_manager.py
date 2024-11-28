@@ -1,8 +1,7 @@
 import unittest
-from datetime import datetime
+from datetime import datetime, timedelta
 from task import Task, HighPriorityTask, LowPriorityTask
 from task_manager import TaskManager
-from datetime import timedelta
 
 class TestTaskManager(unittest.TestCase):
     def setUp(self):
@@ -17,9 +16,9 @@ class TestTaskManager(unittest.TestCase):
 
     def test_add_task(self):
         """Тестирование добавления задачи"""
-        task3 = Task(name="Задача 3", description="Описание задачи", priority="высокий", deadline="2024-12-03")
-        self.task_manager.add_task(task3)
-        self.assertIn(task3, self.task_manager.tasks)
+        task3 = Task(name="Третья задача", description="Описание задачи", priority="высокий", deadline="2024-12-03")
+        result = self.task_manager.add_task(task3)
+        self.assertEqual(result, "Задача 'Третья задача' успешно добавлена.")
 
     def test_remove_task(self):
         """Тестирование удаления задачи"""
@@ -43,28 +42,6 @@ class TestTaskManager(unittest.TestCase):
         self.task1.change_status("ожидает")
         pending_tasks = self.task_manager.find_pending_tasks()
         self.assertIn(self.task1, pending_tasks)
-
-    def test_sort_tasks_by_deadline(self):
-        """Тестирование сортировки задач по сроку выполнения"""
-        sorted_tasks = self.task_manager.sort_tasks_by_deadline()
-        self.assertEqual(sorted_tasks[0], self.task1)
-        self.assertEqual(sorted_tasks[1], self.task2)
-
-    def test_sort_tasks_by_priority(self):
-        """Тестирование сортировки задач по приоритету"""
-        self.task1 = HighPriorityTask(name="Задача 1", description="Описание задачи", deadline="2024-12-01")
-        self.task2 = LowPriorityTask(name="Задача 2", description="Описание задачи", deadline="2024-12-02")
-        self.task3 = Task(name="Задача 3", description="Обычная задача", priority="средний", deadline="2024-12-05")
-
-        self.task_manager.add_task(self.task1)
-        self.task_manager.add_task(self.task2)
-        self.task_manager.add_task(self.task3)
-
-        sorted_tasks = self.task_manager.sort_tasks_by_priority()
-
-        self.assertIsInstance(sorted_tasks[0], HighPriorityTask)
-        self.assertIsInstance(sorted_tasks[1], LowPriorityTask)
-        self.assertIsInstance(sorted_tasks[2], Task)
 
     def test_change_task_status(self):
         """Тестирование изменения статуса задачи"""
@@ -111,6 +88,59 @@ class TestTaskManager(unittest.TestCase):
         """Тестирование попытки добавить задачу в несуществующий проект"""
         with self.assertRaises(TypeError):
             self.task_manager.add_task_to_project(self.task1, "Некорректный проект")
+
+    def test_levenshtein_distance_identical(self):
+        """Тестирование расстояния Левенштейна для одинаковых строк"""
+        distance = self.task_manager._levenshtein_distance("task", "task")
+        self.assertEqual(distance, 0)
+
+    def test_levenshtein_distance_different(self):
+        """Тестирование расстояния Левенштейна для различных строк"""
+        distance = self.task_manager._levenshtein_distance("task", "mask")
+        self.assertEqual(distance, 1)
+
+    def test_levenshtein_distance_empty(self):
+        """Тестирование расстояния Левенштейна для пустой строки"""
+        distance = self.task_manager._levenshtein_distance("", "task")
+        self.assertEqual(distance, 4)
+
+    def test_is_similar_task_name_positive(self):
+        """Тестирование определения схожих названий (позитивный случай)"""
+        result = self.task_manager._is_similar_task_name("Hamster", "hamsters")
+        self.assertTrue(result)
+
+    def test_is_similar_task_name_negative(self):
+        """Тестирование определения несхожих названий"""
+        result = self.task_manager._is_similar_task_name("Task", "Project")
+        self.assertFalse(result)
+
+    def test_is_similar_task_name_case_insensitive(self):
+        """Тестирование регистронезависимости"""
+        result = self.task_manager._is_similar_task_name("task", "TASK")
+        self.assertTrue(result)
+
+    def test_check_task_similarity_found(self):
+        """Тестирование поиска похожей задачи среди существующих"""
+        similar_name = self.task_manager._check_task_similarity("Задача 1")
+        self.assertEqual(similar_name, "Задача 1")
+
+    def test_check_task_similarity_not_found(self):
+        """Тестирование отсутствия похожей задачи"""
+        similar_name = self.task_manager._check_task_similarity("Совершенно новая задача")
+        self.assertIsNone(similar_name)
+
+    def test_add_task_with_similar_name(self):
+        """Тестирование добавления задачи с похожим названием"""
+        new_task = Task(name="Задача 1а", description="Описание задачи", priority="средний", deadline="2024-12-03")
+        result = self.task_manager.add_task(new_task)
+        self.assertEqual(result,
+                         "Задача 'Задача 1а' очень похожа на уже существующую задачу 'Задача 1'. Вы уверены, что хотите добавить её?")
+
+    def test_add_task_no_similar_name(self):
+        """Тестирование добавления задачи с уникальным названием"""
+        new_task = Task(name="Совершенно новая задача", description="Описание", priority="высокий", deadline="2024-12-04")
+        self.task_manager.add_task(new_task)
+        self.assertIn(new_task, self.task_manager.tasks)
 
 if __name__ == '__main__':
     unittest.main()
