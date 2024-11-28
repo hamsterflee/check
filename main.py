@@ -5,6 +5,11 @@ from task import Task, HighPriorityTask, LowPriorityTask
 
 manager = TaskManager()
 
+def update_task_list():
+    tasks_listbox.delete(0, tk.END)
+    for task in manager.tasks:
+        tasks_listbox.insert(tk.END, f"{task.name} - {task.status.capitalize()}")
+
 def add_task():
     name = name_entry.get()
     description = description_entry.get()
@@ -23,12 +28,28 @@ def add_task():
         else:
             task = Task(name, description, priority, deadline)
 
-        manager.add_task(task)
-        messagebox.showinfo("Успех", f"Задача '{task.name}' добавлена!")
-        update_task_list()
+        # Проверка на схожесть названий
+        similar_task_message, task_added = manager.add_task(task)  # Получаем сообщение от метода add_task
+        if not task_added:
+            # Запрос подтверждения у пользователя
+            confirm = messagebox.askyesno(
+                "Предупреждение",
+                similar_task_message  # Показываем сообщение с предупреждением
+            )
+            if confirm:
+                # Если пользователь подтверждает добавление
+                manager.tasks.append(task)  # Добавляем задачу вручную
+                messagebox.showinfo("Успех", f"Задача '{task.name}' успешно добавлена!")
+                update_task_list()  # Обновляем список задач
+            else:
+                print("Задача не добавлена, пользователь отклонил добавление.")
+        else:
+            messagebox.showinfo("Успех", f"Задача '{task.name}' успешно добавлена!")
+            update_task_list()  # Обновляем список задач
 
     except ValueError as e:
         messagebox.showerror("Ошибка", str(e))
+
 
 def remove_task():
     try:

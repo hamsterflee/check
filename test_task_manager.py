@@ -16,9 +16,9 @@ class TestTaskManager(unittest.TestCase):
 
     def test_add_task(self):
         """Тестирование добавления задачи"""
-        task3 = Task(name="Третья задача", description="Описание задачи", priority="высокий", deadline="2024-12-03")
-        result = self.task_manager.add_task(task3)
-        self.assertEqual(result, "Задача 'Третья задача' успешно добавлена.")
+        new_task = Task(name="Третья задача", description="Описание задачи", priority="средний", deadline="2024-12-01")
+        result = self.task_manager.add_task(new_task)
+        self.assertEqual(result, ("Задача 'Третья задача' успешно добавлена.", True))
 
     def test_remove_task(self):
         """Тестирование удаления задачи"""
@@ -133,8 +133,9 @@ class TestTaskManager(unittest.TestCase):
         """Тестирование добавления задачи с похожим названием"""
         new_task = Task(name="Задача 1а", description="Описание задачи", priority="средний", deadline="2024-12-03")
         result = self.task_manager.add_task(new_task)
-        self.assertEqual(result,
-                         "Задача 'Задача 1а' очень похожа на уже существующую задачу 'Задача 1'. Вы уверены, что хотите добавить её?")
+        self.assertEqual(result, (
+        "Задача 'Задача 1а' очень похожа на уже существующую задачу 'Задача 1'. Вы уверены, что хотите добавить её?",
+        False))
 
     def test_add_task_no_similar_name(self):
         """Тестирование добавления задачи с уникальным названием"""

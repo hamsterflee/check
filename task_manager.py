@@ -46,10 +46,10 @@ class TaskManager:
         """
         similar_task = self._check_task_similarity(task.name)
         if similar_task:
-            return f"Задача '{task.name}' очень похожа на уже существующую задачу '{similar_task}'. Вы уверены, что хотите добавить её?"
+            return f"Задача '{task.name}' очень похожа на уже существующую задачу '{similar_task}'. Вы уверены, что хотите добавить её?", False
         else:
             self.tasks.append(task)
-            return f"Задача '{task.name}' успешно добавлена."
+            return f"Задача '{task.name}' успешно добавлена.", True
 
     def remove_task(self, task: Task):
         """Удаление задачи из списка."""
