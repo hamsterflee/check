@@ -41,9 +41,9 @@ class TestProject(unittest.TestCase):
     @freeze_time("2024-12-01")
     def test_get_due_tasks(self):
         """Тест получения просроченных задач с использованием freezegun"""
-        self.task1.deadline = "2024-11-30"  # Просрочена
-        self.task2.deadline = "2024-12-02"  # Не просрочена
-        self.task3.deadline = "2024-11-29"  # Просрочена
+        self.task1.deadline = "2024-11-30"
+        self.task2.deadline = "2024-12-02"
+        self.task3.deadline = "2024-11-29"
         self.project.tasks.extend([self.task1, self.task2, self.task3])
         due_tasks = self.project.get_due_tasks()
         self.assertEqual(len(due_tasks), 2)
@@ -55,6 +55,18 @@ class TestProject(unittest.TestCase):
         """Тест строкового представления проекта"""
         self.project.tasks.extend([self.task1, self.task2])
         self.assertEqual(str(self.project), "Проект: Проект 1, Задач: 2")
+
+    def test_project_with_long_name(self):
+        """Тест создания проекта с длинным именем"""
+        long_name = "A" * 51
+        with self.assertRaises(ValueError):
+            Project(name=long_name)
+
+    def test_project_with_long_description(self):
+        """Тест создания проекта с длинным описанием"""
+        long_description = "A" * 201
+        with self.assertRaises(ValueError):
+            Project(name="Проект 1", description=long_description)
 
 if __name__ == '__main__':
     unittest.main()

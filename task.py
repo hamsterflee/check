@@ -1,9 +1,16 @@
 from datetime import datetime
 
 class Task:
+    MAX_NAME_LENGTH = 50
+    MAX_DESCRIPTION_LENGTH = 200
     def __init__(self, name, description, priority, deadline, status="ожидает"):
         if not name or not description or not priority or not deadline:
             raise ValueError("Все поля (название, описание, приоритет, срок) должны быть заполнены.")
+        if len(name) > self.MAX_NAME_LENGTH:
+            raise ValueError(f"Название задачи не может быть длиннее {self.MAX_NAME_LENGTH} символов.")
+        if len(description) > self.MAX_DESCRIPTION_LENGTH:
+            raise ValueError(f"Описание задачи не может быть длиннее {self.MAX_DESCRIPTION_LENGTH} символов.")
+
         self._validate_deadline(deadline)
         self.name = name
         self.description = description
@@ -20,10 +27,15 @@ class Task:
 
     def change_status(self, new_status):
         """Изменить статус задачи."""
+        valid_statuses = ["ожидает", "выполняется", "выполнена"]
+        if new_status not in valid_statuses:
+            raise ValueError(f"Статус '{new_status}' является недопустимым.")
         self.status = new_status
 
     def set_deadline(self, new_deadline):
         """Изменить срок задачи."""
+        if datetime.strptime(new_deadline, "%Y-%m-%d").date() < datetime.today().date():
+            raise ValueError("Срок не может быть в прошлом.")
         self.deadline = new_deadline
 
     def is_due(self):

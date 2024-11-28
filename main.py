@@ -28,24 +28,21 @@ def add_task():
         else:
             task = Task(name, description, priority, deadline)
 
-        # Проверка на схожесть названий
-        similar_task_message, task_added = manager.add_task(task)  # Получаем сообщение от метода add_task
+        similar_task_message, task_added = manager.add_task(task)
         if not task_added:
-            # Запрос подтверждения у пользователя
             confirm = messagebox.askyesno(
                 "Предупреждение",
-                similar_task_message  # Показываем сообщение с предупреждением
+                similar_task_message
             )
             if confirm:
-                # Если пользователь подтверждает добавление
-                manager.tasks.append(task)  # Добавляем задачу вручную
+                manager.tasks.append(task)
                 messagebox.showinfo("Успех", f"Задача '{task.name}' успешно добавлена!")
-                update_task_list()  # Обновляем список задач
+                update_task_list()
             else:
                 print("Задача не добавлена, пользователь отклонил добавление.")
         else:
             messagebox.showinfo("Успех", f"Задача '{task.name}' успешно добавлена!")
-            update_task_list()  # Обновляем список задач
+            update_task_list()
 
     except ValueError as e:
         messagebox.showerror("Ошибка", str(e))

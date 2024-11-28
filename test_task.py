@@ -12,17 +12,23 @@ class TestTask(unittest.TestCase):
         self.assertEqual(task.deadline, "2024-12-01")
         self.assertEqual(task.status, "ожидает")
 
-    def test_create_task_with_empty_values(self):
-        """Проверка создания задачи с пустыми значениями"""
+    def test_create_task_with_empty_name(self):
+        """Проверка создания задачи с пустым названием"""
         with self.assertRaises(ValueError):
             Task(name="", description="Описание задачи", priority="высокий", deadline="2024-12-01")
 
+    def test_create_task_with_empty_description(self):
+        """Проверка создания задачи с пустым описанием"""
         with self.assertRaises(ValueError):
             Task(name="Задача 1", description="", priority="высокий", deadline="2024-12-01")
 
+    def test_create_task_with_empty_priority(self):
+        """Проверка создания задачи с пустым приоритетом"""
         with self.assertRaises(ValueError):
             Task(name="Задача 1", description="Описание задачи", priority="", deadline="2024-12-01")
 
+    def test_create_task_with_empty_deadline(self):
+        """Проверка создания задачи с пустым сроком"""
         with self.assertRaises(ValueError):
             Task(name="Задача 1", description="Описание задачи", priority="высокий", deadline="")
 
@@ -32,6 +38,18 @@ class TestTask(unittest.TestCase):
             Task(name="Задача", description="Описание", priority="высокий", deadline="2024-12-01")
         except ValueError as e:
             self.fail(f"Непредвиденное исключение: {e}")
+
+    def test_create_task_with_long_name(self):
+        """Проверка создания задачи с длинным названием"""
+        long_name = "A" * 111
+        with self.assertRaises(ValueError):
+            Task(name=long_name, description="Описание задачи", priority="высокий", deadline="2024-12-01")
+
+    def test_create_task_with_long_description(self):
+        """Проверка создания задачи с длинным описанием"""
+        long_description = "A" * 5555
+        with self.assertRaises(ValueError):
+            Task(name="Задача 1", description=long_description, priority="высокий", deadline="2024-12-01")
 
     def test_validate_deadline_invalid_format(self):
         """Тест: некорректный формат дедлайна вызывает ValueError"""
@@ -43,6 +61,18 @@ class TestTask(unittest.TestCase):
         task = Task(name="Задача 1", description="Описание задачи", priority="высокий", deadline="2024-12-01")
         task.change_status("выполняется")
         self.assertEqual(task.status, "выполняется")
+
+    def test_set_deadline_past_date(self):
+        """Тест: установка дедлайна в прошедшую дату вызывает ValueError"""
+        with self.assertRaises(ValueError):
+            task = Task(name="Задача", description="Описание", priority="высокий", deadline="2023-01-01")
+            task.set_deadline("2023-01-01")
+
+    def test_change_status_invalid(self):
+        """Тест: попытка установить некорректный статус вызывает ValueError"""
+        task = Task(name="Задача", description="Описание", priority="высокий", deadline="2024-12-01")
+        with self.assertRaises(ValueError):
+            task.change_status("недопустимый статус")
 
     @freeze_time("2024-11-02")
     def test_is_due(self):
