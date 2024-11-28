@@ -55,4 +55,4 @@ jobs:
           -Dsonar.organization=hamsterflee
           -Dsonar.sources=.
           -Dsonar.python.coverage.reportPaths=coverage.xml
-          -Dsonar.coverage.exclusions=**/test_*.py,**/tests/*.py
+          -Dsonar.coverage.exclusions=**/test_*.py,**/tests/*.py,**/main.py
