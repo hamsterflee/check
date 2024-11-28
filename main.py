@@ -36,12 +36,12 @@ def add_task():
             )
             if confirm:
                 manager.tasks.append(task)
-                messagebox.showinfo("Успех", f"Задача '{task.name}' успешно добавлена!")
+                messagebox.showinfo("Ок", f"Задача '{task.name}' успешно добавлена!")
                 update_task_list()
             else:
                 print("Задача не добавлена, пользователь отклонил добавление.")
         else:
-            messagebox.showinfo("Успех", f"Задача '{task.name}' успешно добавлена!")
+            messagebox.showinfo("Ок", f"Задача '{task.name}' успешно добавлена!")
             update_task_list()
 
     except ValueError as e:
@@ -53,7 +53,7 @@ def remove_task():
         selected_task_index = tasks_listbox.curselection()[0]
         task = manager.tasks[selected_task_index]
         manager.remove_task(task)
-        messagebox.showinfo("Успех", f"Задача '{task.name}' удалена!")
+        messagebox.showinfo("Успешно", f"Задача '{task.name}' удалена!")
         update_task_list()
     except IndexError:
         messagebox.showerror("Ошибка", "Не выбрана задача.")
@@ -74,7 +74,7 @@ def change_status():
         task = manager.tasks[selected_task_index]
         new_status = status_var.get()
         manager.change_task_status(task, new_status)
-        messagebox.showinfo("Успех", f"Статус задачи '{task.name}' изменен на {new_status}!")
+        messagebox.showinfo("Успешно", f"Статус задачи '{task.name}' изменен на {new_status}!")
         update_task_list()
     except IndexError:
         messagebox.showerror("Ошибка", "Не выбрана задача.")
