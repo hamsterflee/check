@@ -12,17 +12,17 @@ class TaskManager:
         dp = [[0] * (len2 + 1) for _ in range(len1 + 1)]
 
         for i in range(len1 + 1):
-            dp[i][0] = i
+            dp[i][0] = i # для преобразования первых i символов str1 в пустую строку str2 требуется i операций (удаление)
         for j in range(len2 + 1):
-            dp[0][j] = j
+            dp[0][j] = j # для преобразования пустой строки в первые j символов str2 требуется j операций (вставки)
 
         for i in range(1, len1 + 1):
             for j in range(1, len2 + 1):
-                cost = 0 if str1[i - 1] == str2[j - 1] else 1
+                cost = 0 if str1[i - 1] == str2[j - 1] else 1 # стоимость преобразования (замена)
                 dp[i][j] = min(
-                    dp[i - 1][j] + 1,
-                    dp[i][j - 1] + 1,
-                    dp[i - 1][j - 1] + cost,
+                    dp[i - 1][j] + 1, # удаление
+                    dp[i][j - 1] + 1, # вставка
+                    dp[i - 1][j - 1] + cost, # замена
                 )
         return dp[len1][len2]
 
