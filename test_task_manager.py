@@ -104,6 +104,16 @@ class TestTaskManager(unittest.TestCase):
         distance = self.task_manager._levenshtein_distance("", "task")
         self.assertEqual(distance, 4)
 
+    def test_levenshtein_distance_non_string(self):
+        """Тестирование расстояния Левенштейна с нестроковыми аргументами"""
+        with self.assertRaises(TypeError):
+            self.task_manager._levenshtein_distance(123, "test")
+
+    def test_levenshtein_distance_none(self):
+        """Тестирование расстояния Левенштейна с None в качестве аргумента"""
+        with self.assertRaises(TypeError):
+            self.task_manager._levenshtein_distance(None, "test")
+
     def test_is_similar_task_name_positive(self):
         """Тестирование определения схожих названий (позитивный случай)"""
         result = self.task_manager._is_similar_task_name("Hamster", "hamsters")
